@@ -1,0 +1,155 @@
+{% extends 'seller-header.html' %}
+
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+    <main class="contact-us-content">
+        <!-- breadcrumb start -->
+        <div class="page-breadcrumb">
+            <div class="container container-width">
+                <div class="breadcrumb-wrapper">
+                    <div class="breadcrumb-list">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="/" class="transition"><i class="bi bi-house"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Add Product</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- contact us wrapper -->
+        <section class="contact-us space-top space-bottom">
+            <div class="container container-width">
+                <div class="contact-us-wrapper space-bottom">
+                    <div class="contact-left">
+                        {% if msg %}
+                            <p style="color: green;font-size: 18px;margin-block-end: 10px;">{{msg}}</p>
+                        {% endif %}
+                        <form action="{% url 'seller-add-product' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="contact-form product-form-card">
+                                <div class="mb-3">
+                                    <label class="form-label">Product Category</label>
+                                    <select class="form-control form-select" name="product_category">
+                                        <option selected disabled>Select product</option>
+                                        <option value="all-collections">All collections</option>
+                                        <option value="mobile">Mobile</option>
+                                        <option value="camera">Camera</option>
+                                        <option value="headphone">Headphone</option>
+                                        <option value="laptop">Laptop</option>
+                                        <option value="speaker">Speaker</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Product Name</label>
+                                    <input type="text" class="form-control" name="product_name" placeholder="Enter product name">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Product Price</label>
+                                    <input type="text" class="form-control" name="product_price" placeholder="Enter product price">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Product Image</label>
+                                    <input type="file" class="form-control" name="profile_pricture">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label">Product Details</label>
+                                    <textarea class="form-control" rows="4" name="product_desc" placeholder="Enter product details"></textarea>
+                                </div>
+
+                                <div class="text-end">
+                                    <button class="main-btn" type="submit">Add Product</button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="map space-bottom">
+            <div class="container container-width">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20094339.672589384!2d75.12710611286947!3d30.243823205891736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1703747978910!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </section>
+
+    </main>   
+</body>
+
+</html>
+
+{% endblock %}
+
+<style>
+    /* Product Add Form Styling */
+.product-form-card {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    max-width: 600px;
+}
+
+.product-form-card .form-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #222;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.product-form-card .form-label {
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 6px;
+}
+
+.product-form-card .form-control,
+.product-form-card .form-select {
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 15px;
+}
+
+.product-form-card textarea.form-control {
+    height: auto;
+}
+
+.product-form-card .form-control:focus,
+.product-form-card .form-select:focus {
+    border-color: #ff7a00;
+    box-shadow: 0 0 0 0.15rem rgba(255, 122, 0, 0.2);
+}
+
+.product-form-card .main-btn {
+    padding: 12px 28px;
+    font-size: 15px;
+    border-radius: 8px;
+}
+/* Add Product Form Box */
+.contact-form {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+</style>

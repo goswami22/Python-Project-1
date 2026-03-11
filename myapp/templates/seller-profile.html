@@ -1,0 +1,85 @@
+{% extends 'seller-header.html' %}
+
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+    <main class="contact-us-content">
+        <!-- breadcrumb start -->
+        <div class="page-breadcrumb">
+            <div class="container container-width">
+                <div class="breadcrumb-wrapper">
+                    <div class="breadcrumb-list">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="/" class="transition"><i class="bi bi-house"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Seller profile</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- contact us wrapper -->
+        <section class="contact-us space-top space-bottom">
+            <div class="container container-width">
+                <div class="contact-us-wrapper">
+                    <div class="contact-left">
+                        {% if msg %}
+                            <p style="color: green;font-size: 18px;margin-block-end: 10px;">{{msg}}</p>
+                        {% endif %}
+                        <form action="{% url 'profile' %}" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="contact-form">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" name="fname" value="{{user.fname}}">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" name="lname"  value="{{user.lname}}">
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" name="email"  value="{{user.email}}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <input type="number" class="form-control" name="mobile"  value="{{user.mobile}}">
+                            </div>
+                            <div class="mb-3">
+                                <img src="{{user.profile_pricture.url}}" style="width: 100px;height: 100px;border-radius: 50%; object-fit: cover;" alt="profile picture">
+                            </div>
+                            <div class="mb-3">
+                                <input type="file" class="form-control" name="profile_pricture" placeholder="Choose file">
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="address" class="form-control" placeholder="Address">{{user.address}}</textarea>
+                            </div>                           
+                            <div class="text-end mb-4">
+                                <button class="main-btn" type="submit">Update Profile</button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="map space-bottom">
+            <div class="container container-width">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20094339.672589384!2d75.12710611286947!3d30.243823205891736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1703747978910!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </section>
+
+    </main>   
+</body>
+
+</html>
+
+{% endblock %}

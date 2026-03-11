@@ -1,0 +1,71 @@
+{% extends 'header.html' %}
+
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+</head>
+
+<body>
+<!-- main product start -->
+<section class="main-product space-top gray-bg">
+    <div class="container container-width">
+        <h2 class="title  mb-5 fw-bold">Product views</h2>
+        <div class="main-product-wrapper">
+            <div class="main-product-right main-product-container">
+                <div class="row gy-4">
+                    {% for i in all_products %}
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="item">
+                            <div class="single-product">
+                                <div class="image-box">
+                                    <img src="{{i.profile_pricture.url}}" alt="product img"
+                                        class="img-fluid img2">
+                                    <div class="btn-wrapper">
+                                        <ul class="transition">
+                                            <li><a href="#" class="transition"><i
+                                                        class="bi bi-bag-check"></i></a></li>
+                                            <li><a href="#" class="transition"><i
+                                                        class="bi bi-heart"></i></a>
+                                            </li>
+                                            <li><a href="#" class="transition"><i
+                                                        class="bi bi-repeat"></i></a>
+                                            </li>
+                                            <li><a href="#" class="transition"><i class="bi bi-eye"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="product-content">
+                                    <p class="product-category">{{i.product_category}}</p>
+                                    <h3 class="product-title"><a href="{% url 'product-details' pk=i.pk %}">{{i.product_name}}</a>
+                                    </h3>
+                                    <p class="prodict_description">{{i.product_desc}}</p>
+                                    <div class="price-box d-flex justify-content-between mt-auto">
+                                        <h5 class="new-price">${{i.product_price}}</h5>
+                                        {% if request.session.email %}
+                                            <a href="{% url 'add-to-cart' pk=i.pk %}" class="main-btn w-auto">Add to cart</a>
+                                        {% endif %}
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    </main>
+
+</body>
+
+</html>
+{% endblock %}

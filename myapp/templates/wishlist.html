@@ -1,0 +1,183 @@
+<!-- https://depot.qodeinteractive.com/cart/ -->
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+    <!-- breadcrumb start -->
+    <div class="page-breadcrumb">
+        <div class="container container-width">
+            <div class="breadcrumb-wrapper">
+                <div class="breadcrumb-list">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/" class="transition"><i class="bi bi-house"></i></a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if wishlists %}
+    <section class="wishlist py-5">
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table wishlist-table align-middle">
+
+                    <!-- Table Head -->
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>product</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Stock</th>
+                            <th class="text-end"></th>
+                        </tr>
+                    </thead>
+                    {% if request.session.email %}
+                    <!-- Table Body -->
+                    <tbody>
+                        {% for i in wishlists %}
+                            <tr class="wishlist-row">
+                                
+                                {% if wishlist_flag == true %}
+                                    <td class="remove-col">
+                                        <a href="{% url 'remove-form-wishlist' pk=i.product.pk %}" class="remove-btn">×</a>
+                                    </td>
+                                {% endif %}
+                                
+                                <!-- Product -->
+                                <td class="product-col">
+                                    <div class="product-box">
+                                        <img src="{{ i.product.profile_pricture.url}}" class="wishlist-img">
+                                        <div>
+                                            <span class="product-name">
+                                                {{ i.product.product_name }}
+                                            </span>
+
+                                            <!-- Mobile Info -->
+                                            <div class="mobile-info">
+                                                <div>$ {{ i.product.product_price }}</div>
+                                                <div>In stock</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- Price (Desktop Only) -->
+                                <td class="text-center desktop-only">
+                                    <div class="product-price">
+                                        ${{ i.product.product_price }}
+                                    </div>
+                                </td>
+
+                                <!-- Stock (Desktop Only) -->
+                                <td class="text-center desktop-only stock">
+                                    <span>In stock</span>
+                                </td>
+
+                                <!-- Button -->
+                                <td class="text-end btn-col">
+                                    <a href="{% url 'add-to-cart' pk=i.product.pk %}" class="add-cart-btn main-btn desktop-only">
+                                        <i class="bi bi-plus-lg"></i>
+                                        ADD TO CART
+                                    </a>
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% endif %}
+                </table>
+            </div>
+
+        </div>
+    </section>
+    {% else %}
+    <h2>No product available</h2>
+    {% endif %}
+</body>
+{% endblock %}
+
+<style>
+    /* Hide mobile info on desktop */
+    .mobile-info {
+        display: none;
+    }
+
+    /* Desktop only */
+    .desktop-only {
+        display: table-cell;
+    }
+
+    /* ========================= */
+    /* MOBILE DESIGN */
+    /* ========================= */
+
+    @media screen and (max-width: 991px) {
+
+        .wishlist .wishlist-table thead {
+            display: none;
+        }
+
+        .wishlist .wishlist-table tr {
+            display: block;
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+        }
+
+        .wishlist .wishlist-table td {
+            display: block;
+            border: none;
+            padding: 5px 0;
+            text-align: left !important;
+        }
+
+        /* Top Section: Image + Title + Close */
+        .product-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .remove-col {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+        }
+
+        .wishlist-row {
+            position: relative;
+        }
+
+        /* Show price & stock under title */
+        .mobile-info {
+            display: block;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .desktop-only {
+            display: none;
+        }
+
+        /* Quantity spacing */
+        .qty-box {
+            margin-top: 10px;
+        }
+
+        /* Button full width */
+        .btn-col a {
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+</style>

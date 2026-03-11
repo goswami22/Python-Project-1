@@ -1,0 +1,114 @@
+{% extends 'seller-header.html' %}
+
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+    <main class="contact-us-content">
+        <!-- breadcrumb start -->
+        <div class="page-breadcrumb">
+            <div class="container container-width">
+                <div class="breadcrumb-wrapper">
+                    <div class="breadcrumb-list">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="/" class="transition"><i class="bi bi-house"></i></a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Edit Product</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- contact us wrapper -->
+<section class="contact-us space-top space-bottom">
+    <div class="container container-width">
+        <div class="contact-us-wrapper space-bottom">
+            <div class="contact-left">
+
+                {% if msg %}
+                    <p style="color: green;font-size: 18px;margin-block-end: 10px;">{{msg}}</p>
+                {% endif %}
+
+                <form action="{% url 'seller-edit-product' pk=product.pk %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="contact-form">
+
+                        <div class="row g-4 align-items-start">
+
+                            <!-- LEFT SIDE IMAGE -->
+                            <div class="col-md-4 text-center">
+                                <img src="{{product.profile_pricture.url}}" 
+                                     style="width: 100%; height: auto; border-radius: 10px; object-fit: cover;"
+                                     alt="Product Image">
+                            </div>
+
+                            <!-- RIGHT SIDE FORM -->
+                            <div class="col-md-8">
+
+                                <div class="mb-3">
+                                    <select class="form-control" name="product_category">
+                                        <option>select seller product</option>
+                                        <option value="all-collections" {% if product.product_category == 'all-collections' %}selected{% endif %}>All collections</option>
+                                        <option value="mobile" {% if product.product_category == 'mobile' %}selected{% endif %}>Mobile</option>
+                                        <option value="camera" {% if product.product_category == 'camera' %}selected{% endif %}>Camera</option>
+                                        <option value="headphone" {% if product.product_category == 'headphone' %}selected{% endif %}>Headphone</option>
+                                        <option value="laptop" {% if product.product_category == 'laptop' %}selected{% endif %}>Laptop</option>
+                                        <option value="speaker" {% if product.product_category == 'speaker' %}selected{% endif %}>Speaker</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" name="product_name" value="{{product.product_name}}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" name="product_price" value="{{product.product_price}}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <input type="file" class="form-control" name="profile_pricture">
+                                </div>
+
+                                <div class="mb-3">
+                                    <textarea class="form-control" name="product_desc" rows="4">{{product.product_desc}}</textarea>
+                                </div>
+
+                                <div class="mb-4">
+                                    <button class="main-btn" type="submit">Update Product</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+        <section class="map space-bottom">
+            <div class="container container-width">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d20094339.672589384!2d75.12710611286947!3d30.243823205891736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30635ff06b92b791%3A0xd78c4fa1854213a6!2sIndia!5e0!3m2!1sen!2sin!4v1703747978910!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </section>
+
+    </main>   
+</body>
+
+</html>
+
+{% endblock %}

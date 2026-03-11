@@ -1,0 +1,205 @@
+<!-- https://depot.qodeinteractive.com/cart/ -->
+{% extends 'header.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body>
+    <!-- breadcrumb start -->
+    <div class="page-breadcrumb">
+        <div class="container container-width">
+            <div class="breadcrumb-wrapper">
+                <div class="breadcrumb-list">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/" class="transition"><i class="bi bi-house"></i></a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">Cart</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="cart py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table cart-table align-middle">
+
+                            <!-- Table Head -->
+                            {% if carts %}
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>product</th>
+                                    <th class="text-center">price</th>
+                                    <th class="text-center">quntity</th>
+                                    <th class="text-end">subtotal</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+                                <!-- {% if request.session.email %} -->
+
+                                {% for i in carts %}
+                                <tr class="cart-row">
+
+                                    {% if cart_flag == true %}
+                                    <td class="remove-col">
+                                        <a href="{% url 'remove-form-cart' pk=i.product.pk %}" class="remove-btn">×</a>
+                                    </td>
+                                    {% endif %}
+
+                                    <td class="product-col">
+                                        <div class="product-box">
+                                            <img src="{{ i.product.profile_pricture.url }}" class="cart-img">
+                                            <div>
+                                                <span class="product-name">
+                                                    {{i.product.product_name}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center desktop-only">
+                                        <div class="product-price">$ {{i.product.product_price}}</div>
+                                    </td>
+
+
+                                    <td class="text-center">
+                                        <div
+                                            class="qty-container d-flex justify-content-center align-items-center gap-1">
+
+                                            <!-- Decrease Button -->
+                                            <form action="{% url 'change-qty' %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="id" value="{{ i.pk }}">
+                                                <input type="hidden" name="action" value="decrease">
+                                                <button type="submit" class="qty-btn">−</button>
+                                            </form>
+
+                                            <!-- Quantity Display -->
+                                            <span class="qty-box text-center">
+                                                {{ i.product_qut }}
+                                            </span>
+
+                                            <!-- Increase Button -->
+                                            <form action="{% url 'change-qty' %}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="id" value="{{ i.pk }}">
+                                                <input type="hidden" name="action" value="increase">
+                                                <button type="submit" class="qty-btn">+</button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+
+                                    <td class="text-end desktop-only">
+                                        <div class="total-price">
+                                            $ {{i.total_price}}
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+                                <!-- {% endif %} -->
+                                {% else %}
+                                <h2>No product available</h2>
+                            </tbody>
+                            {% endif %}
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+    <div class="container space-bottom">
+        <div class="row mt-5 justify-content-end">
+            <div class="col-12 col-md-6 col-lg-4">
+
+                <div class="cart-summary-card">
+
+                    <h4 class="summary-title mb-4">Cart Totals</h4>
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>$ {{net_price}}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Shipping</span>
+                        <span>Free</span>
+                    </div>
+
+                    <div class="summary-row total-row">
+                        <span>Total</span>
+                        <span>$ {{net_price}}</span>
+                    </div>
+                    <div class="cart-btn-area text-center">
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" id="net_price" name="amount" value="{{net_price}}">
+                            <button class="site-btn main-btn mt-4 border-0" type="button" id="checkout-button">Proceed
+                                Checkout</button>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+
+var stripe = Stripe('pk_test_51T9J7020T3C36SA1dUcf1mjpxJZmxgiTwZ6wRDeFc2BTpCTtQIua2kfgc9Kbgn2Fkk8SNKOV8AagdKN4RVimH2oI00BW6sTigE');
+var checkoutButton = document.getElementById('checkout-button');
+
+checkoutButton.addEventListener('click', function() { 
+ fetch('/create-checkout-session/', {
+ method: 'POST',
+    headers:{
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest', //Necessary to work with request.is_ajax()
+
+    },
+    body: JSON.stringify({'post_data':'{{net_price}}'})
+ })
+ .then(function(response) {
+ return response.json();
+ })
+ .then(function(session) {
+ return stripe.redirectToCheckout({ sessionId: session.id });
+ })
+ .then(function(result) {
+ // If `redirectToCheckout` fails due to a browser or network
+ // error, you should display the localized error message to your
+ // customer using `error.message`.
+ if (result.error) {
+ alert(result.error.message);
+ }
+ })
+ .catch(function(error) {
+ console.error('Error:', error);
+ });
+ });
+ </script>
+
+
+</body>
+
+
+{% endblock %}
